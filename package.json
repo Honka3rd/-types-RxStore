@@ -1,0 +1,24 @@
+{
+  "name": "@types/rx-store",
+  "version": "1.0.0",
+  "description": "type defination for RxStore",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Honka3rd/-types-RxStore.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Honka3rd/-types-RxStore/issues"
+  },
+  "homepage": "https://github.com/Honka3rd/-types-RxStore#readme",
+  "dependencies": {
+    "immutable": "^4.2.2",
+    "rxjs": "^7.8.0",
+    "typescript": "5.0.2"
+  }
+}
