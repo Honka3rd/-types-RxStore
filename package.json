@@ -1,5 +1,5 @@
 {
-  "name": "@types/rx-store",
+  "name": "rx-store-types",
   "version": "1.0.0",
   "description": "type defination for RxStore",
   "main": "index.js",
