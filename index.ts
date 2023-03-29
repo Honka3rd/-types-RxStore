@@ -101,9 +101,14 @@ export type Action<P, T> = {
   payload: P;
 };
 
+export type RequiredAction<P, T> = {
+  type: T;
+  payload: P;
+};
+
 export type Reducer<P, T, S extends BS, K extends keyof S> = (
   state: ReturnType<S[K]>,
-  action: Action<T, P>
+  action: RequiredAction<T, P>
 ) => ReturnType<S[K]>;
 
 export type AnsycReducer<P, T, S extends BS, K extends keyof S> = (
