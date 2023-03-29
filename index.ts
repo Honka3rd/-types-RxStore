@@ -98,7 +98,7 @@ export interface Connectivity<S extends BS>
 
 export type Action<P, T> = {
   type: T;
-  payload: P;
+  payload?: P;
 };
 
 export type RequiredAction<P, T> = {
