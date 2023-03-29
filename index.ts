@@ -200,8 +200,7 @@ export interface RxStore<S extends BS> {
     params: {
       reducer: AnsycReducer<T, P, S, K>;
       key: K;
-    },
-    config?: AsyncDispatchConfig<S, K>
+    }
   ) => AsyncDispatch<P, T, S, K>;
   withComputation: <R, KS extends keyof S>(params: {
     computation: Computation<R, S, KS>;
