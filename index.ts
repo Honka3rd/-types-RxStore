@@ -196,10 +196,13 @@ export interface RxStore<S extends BS> {
     reducer: Reducer<T, P, S, K>;
     key: K;
   }) => Dispatch<P, T>;
-  createAsyncDispatch: <K extends keyof S, T, P = void>(params: {
-    reducer: AnsycReducer<T, P, S, K>;
-    key: K;
-  }) => AsyncDispatch<P, T, S, K>;
+  createAsyncDispatch: <K extends keyof S, T, P = void>(
+    params: {
+      reducer: AnsycReducer<T, P, S, K>;
+      key: K;
+    },
+    config?: AsyncDispatchConfig<S, K>
+  ) => AsyncDispatch<P, T, S, K>;
   withComputation: <R, KS extends keyof S>(params: {
     computation: Computation<R, S, KS>;
     keys: KS[];
