@@ -116,7 +116,7 @@ export type AnsycReducer<P, T, S extends BS, K extends keyof S> = (
   action: Action<T, P>
 ) => Promise<ReturnType<S[K]>> | Observable<ReturnType<S[K]>>;
 
-export type Dispatch<P, T> = (action: Action<P, T>) => void;
+export type Dispatch<P, T> = (action: RequiredAction<P, T>) => void;
 
 export type AsyncDispatchConfig<S extends BS, K extends keyof S> = {
   start?: () => void;
