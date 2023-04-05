@@ -5,9 +5,9 @@ export type Any = {
   [K: string]: any;
 };
 
-export type Initiator<K extends string = string> = ((
+export type Initiator<K extends string = string, R = any> = ((
   r?: RxStore<Any> & Subscribable<Any>
-) => any) & { selector?: K };
+) => R) & { selector?: K };
 
 export type BS = {
   [k: string]: <S extends BS>(r?: Reactive<S>) => any;
@@ -288,7 +288,7 @@ export interface RxImStore<IS extends IBS> extends RxStore<IS> {
   getDefaultAll(): Map<keyof IS, ReturnType<IS[keyof IS]>>;
 }
 
-export interface Plugin<K extends string, S extends BS> {
+export interface Plugin<K extends string> {
   selector: () => K;
   chain: <I extends Initiator[]>(...initiators: I) => this;
   initiator: Initiator<K>;
