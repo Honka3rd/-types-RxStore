@@ -216,18 +216,27 @@ export interface RxStore<S extends BS> {
   getDefault<K extends keyof S>(key: K): ReturnType<S[K]>;
   children: <K extends (keyof S)[]>(
     selectors: K
-  ) => Readonly<[
-    {
-      setParentState: <KK extends K[number]>(
-        key: KK,
-        value: ReturnType<S[KK]>
-      ) => boolean;
-      getParentState: <KK extends K[number]>(
-        key: KK
-      ) => ReturnType<S[KK]> | undefined;
-    },
-    Observable<Partial<{ [K in keyof S]: ReturnType<S[K]> }>>
-  ]>;
+  ) => Readonly<
+    [
+      {
+        setParentState: <KK extends K[number]>(
+          key: KK,
+          value: ReturnType<S[KK]>
+        ) => boolean;
+        getParentState: <KK extends K[number]>(
+          key: KK
+        ) => ReturnType<S[KK]> | undefined;
+        getParentDefault: <KK extends K[number]>(
+          key: KK
+        ) => ReturnType<S[KK]> | undefined;
+        comparator: Comparator<ReturnType<S[K[number]]>>;
+        parentComparatorMap: Partial<
+          Partial<{ [K in keyof S]: Comparator<ReturnType<S[K]>> }>
+        >;
+      },
+      Observable<Partial<{ [K in keyof S]: ReturnType<S[K]> }>>
+    ]
+  >;
 }
 
 export interface RxNStore<S extends BS> extends RxStore<S> {
