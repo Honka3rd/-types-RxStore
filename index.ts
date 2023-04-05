@@ -1,8 +1,12 @@
 import { Observable } from "rxjs";
 import { Collection, Record, Seq, ValueObject, Map } from "immutable";
 
-export type Initiator<S extends BS = BS, K extends string = string> = (
-  r?: Reactive<S>
+export type Any = {
+  [K: string]: any;
+};
+
+export type Initiator<K extends string = string> = (
+  r?: RxStore<Any> & Subscribable<Any>
 ) => any & { selector?: K };
 
 export type BS = {
@@ -287,5 +291,5 @@ export interface RxImStore<IS extends IBS> extends RxStore<IS> {
 export interface Plugin<K extends string, S extends BS> {
   selector: () => K;
   chain: <I extends Initiator[]>(...initiators: I) => this;
-  initiator: Initiator<S, K>;
+  initiator: Initiator<K>;
 }
