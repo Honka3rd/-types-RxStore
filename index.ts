@@ -214,9 +214,9 @@ export interface RxStore<S extends BS> {
     keys: KS[];
   }) => ComputedAsync<R, S, KS>;
   getDefault<K extends keyof S>(key: K): ReturnType<S[K]>;
-  children: (
-    selectors: Partial<keyof S>[]
-  ) => Observable<{ [K in Partial<keyof S>]: ReturnType<S[K]> }>;
+  children: <K extends (keyof S)[]>(
+    selectors: K
+  ) => Observable<Partial<{ [K in keyof S]: ReturnType<S[K]>; }>>;
 }
 
 export interface RxNStore<S extends BS> extends RxStore<S> {
