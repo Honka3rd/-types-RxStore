@@ -1,6 +1,10 @@
 import { Observable } from "rxjs";
 import { Collection, Record, Seq, ValueObject, Map } from "immutable";
 
+export type Initiator<S extends BS = BS, K extends string = string> = (
+  r?: Reactive<S>
+) => any & { selector?: K };
+
 export type BS = {
   [k: string]: <S extends BS>(r?: Reactive<S>) => any;
 };
@@ -158,7 +162,7 @@ export type AsyncResponse<R> =
   | { success: false; cause: any };
 
 export enum AsyncStates {
-  FULLFILLED,
+  FULFILLED,
   ERROR,
   PENDING,
 }
@@ -255,4 +259,10 @@ export interface RxImStore<IS extends IBS> extends RxStore<IS> {
     keys: KS
   ): Map<keyof IS, ReturnType<IS[keyof IS]>>;
   getDefaultAll(): Map<keyof IS, ReturnType<IS[keyof IS]>>;
+}
+
+export interface Plugin<K extends string, S extends BS> {
+  selector: () => K;
+  chain: <I extends Initiator[]>(...initiators: I) => this;
+  initiator: Initiator<S, K>;
 }
