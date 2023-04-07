@@ -1,13 +1,17 @@
 import { Observable } from "rxjs";
-import { Collection, Record, Seq, ValueObject, Map } from "immutable";
+import {
+  Collection,
+  Record as RecordI,
+  Seq,
+  ValueObject,
+  Map,
+} from "immutable";
 
 export type Any = {
   [K: string]: any;
 };
 
-export type Initiator<R = any> = (
-  r?: RxStore<Any> & Subscribable<Any>
-) => R;
+export type Initiator<R = any> = (r?: RxStore<Any> & Subscribable<Any>) => R;
 
 export type BS = {
   [k: string]: <S extends BS>(r?: Reactive<S>) => any;
@@ -18,7 +22,7 @@ export type ImmutableBase =
   | Collection.Indexed<any>
   | Collection.Keyed<any, any>
   | Collection.Set<any>
-  | Record.Factory<any>
+  | RecordI.Factory<any>
   | Seq<any, any>
   | Seq.Indexed<any>
   | Seq.Keyed<any, any>
@@ -227,6 +231,15 @@ export interface RxStore<S extends BS> {
           key: KK,
           value: ReturnType<S[KK]>
         ) => boolean;
+        observeParentStates: (
+          observer: (
+            result: Record<K[number], ReturnType<S[K[number]]>>
+          ) => void
+        ) => Unobserve;
+        observeParentState: <KK extends K[number]>(
+          key: KK,
+          observer: (result: ReturnType<S[KK]>) => void
+        ) => Unobserve | undefined;
         getParentState: <KK extends K[number]>(
           key: KK
         ) => ReturnType<S[KK]> | undefined;
