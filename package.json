@@ -4,7 +4,7 @@
   "description": "type definition for RxStore",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "npx tsc"
   },
   "repository": {
     "type": "git",
