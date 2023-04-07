@@ -1,6 +1,6 @@
 {
   "name": "rx-store-types",
-  "version": "1.2.5",
+  "version": "1.2.6",
   "description": "type definition for RxStore",
   "main": "index.js",
   "scripts": {
