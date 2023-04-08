@@ -74,7 +74,7 @@ export type RequiredAction<P, T> = {
     payload: P;
 };
 export type Reducer<P, T, S extends BS, K extends keyof S> = (state: ReturnType<S[K]>, action: RequiredAction<T, P>) => ReturnType<S[K]>;
-export type AnsycReducer<P, T, S extends BS, K extends keyof S> = (state: ReturnType<S[K]>, action: Action<T, P>) => Promise<ReturnType<S[K]>> | Observable<ReturnType<S[K]>>;
+export type AsyncReducer<P, T, S extends BS, K extends keyof S> = (state: ReturnType<S[K]>, action: Action<T, P>) => Promise<ReturnType<S[K]>> | Observable<ReturnType<S[K]>>;
 export type Dispatch<P, T> = (action: RequiredAction<P, T>) => void;
 export type AsyncDispatchConfig<S extends BS, K extends keyof S> = {
     start?: () => void;
@@ -144,7 +144,7 @@ export interface RxStore<S extends BS> {
         key: K;
     }) => Dispatch<P, T>;
     createAsyncDispatch: <K extends keyof S, T, P = void>(params: {
-        reducer: AnsycReducer<T, P, S, K>;
+        reducer: AsyncReducer<T, P, S, K>;
         key: K;
     }) => AsyncDispatch<P, T, S, K>;
     withComputation: <R, KS extends keyof S>(params: {
