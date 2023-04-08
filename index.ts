@@ -220,6 +220,11 @@ export interface RxStore<S extends BS> {
   withAsyncComputation: <R, KS extends keyof S>(params: {
     computation: ComputationAsync<R, S, KS>;
     keys: KS[];
+    comparator?: Comparator<{ [K in KS]: ReturnType<S[K]> }>;
+    onStart?: (val: { [K in keyof S]: ReturnType<S[K]> }) => void;
+    onError?: (err: any) => void;
+    onSuccess?: (result: R) => void;
+    onComplete?: () => void
   }) => ComputedAsync<R, S, KS>;
   getDefault<K extends keyof S>(key: K): ReturnType<S[K]>;
   children: <K extends (keyof S)[]>(
