@@ -1,8 +1,9 @@
 {
   "name": "rx-store-types",
-  "version": "1.2.6",
+  "version": "1.2.7",
   "description": "type definition for RxStore",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "build": "npx tsc"
   },
