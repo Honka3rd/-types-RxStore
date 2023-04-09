@@ -313,7 +313,7 @@ export interface Plugin<K extends string, R = any> {
 }
 
 export abstract class PluginImpl<K extends string, R = any> implements Plugin<K, R> {
-  private connector?: RxStore<Any> & Subscribable<Any>;
+  protected connector?: RxStore<Any> & Subscribable<Any>;
   constructor(
     protected id: K,
   ) {}

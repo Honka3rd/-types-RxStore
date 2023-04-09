@@ -226,7 +226,7 @@ export interface Plugin<K extends string, R = any> {
 }
 export declare abstract class PluginImpl<K extends string, R = any> implements Plugin<K, R> {
     protected id: K;
-    private connector?;
+    protected connector?: RxStore<Any> & Subscribable<Any>;
     constructor(id: K);
     private reportNoneConnectedError;
     protected safeExecute<R>(callback: (connector: RxStore<Any> & Subscribable<Any>) => R): R | undefined;
