@@ -14,7 +14,7 @@ export type Any = {
 export type Initiator<R = any> = (r?: RxStore<Any> & Subscribable<Any>) => R;
 
 export type BS = {
-  [k: string]: <S extends BS>(r?: Reactive<S>) => any;
+  [k: string]: Initiator;
 };
 
 export type ImmutableBase =
@@ -35,7 +35,7 @@ export type ImmutableBase =
   | boolean;
 
 export interface IBS extends BS {
-  [k: string]: <S extends BS>(r?: Reactive<S>) => ImmutableBase;
+  [k: string]: Initiator<ImmutableBase>;
 }
 
 export type CloneFunction<T> = (input: T) => T;
