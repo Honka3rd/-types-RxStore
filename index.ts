@@ -311,3 +311,40 @@ export interface Plugin<K extends string, R = any> {
   chain: <P extends Plugin<string>[]>(...plugins: P) => this;
   initiator: Initiator<R>;
 }
+
+export abstract class PluginImpl<K extends string, R = any> implements Plugin<K, R> {
+  private connector?: RxStore<Any> & Subscribable<Any>;
+  constructor(
+    protected id: K,
+  ) {}
+
+  private reportNoneConnectedError() {
+    throw Error("initiator method is not called");
+  }
+
+  protected safeExecute<R>(
+    callback: (connector: RxStore<Any> & Subscribable<Any>) => R
+  ) {
+    const connector = this.connector as RxStore<Any> &
+      Subscribable<Any>;
+    if (connector) {
+      return callback(connector);
+    }
+    this.reportNoneConnectedError();
+  }
+
+  chain<P extends Plugin<string, any>[]>(...plugins: P) {
+    this.safeExecute((connector) => {
+      Array.from(plugins).forEach((plugin) => {
+        plugin.initiator(connector);
+      });
+    });
+
+    return this;
+  }
+
+  selector = () => this.id;
+
+  abstract initiator: Initiator<R>;
+  
+}

@@ -224,4 +224,14 @@ export interface Plugin<K extends string, R = any> {
     chain: <P extends Plugin<string>[]>(...plugins: P) => this;
     initiator: Initiator<R>;
 }
+export declare abstract class PluginImpl<K extends string, R = any> implements Plugin<K, R> {
+    protected id: K;
+    private connector?;
+    constructor(id: K);
+    private reportNoneConnectedError;
+    protected safeExecute<R>(callback: (connector: RxStore<Any> & Subscribable<Any>) => R): R | undefined;
+    chain<P extends Plugin<string, any>[]>(...plugins: P): this;
+    selector: () => K;
+    abstract initiator: Initiator<R>;
+}
 export {};
