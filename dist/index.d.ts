@@ -219,9 +219,9 @@ export interface RxImStore<IS extends IBS> extends RxStore<IS> {
     getDefaults<KS extends (keyof IS)[]>(keys: KS): Map<keyof IS, ReturnType<IS[keyof IS]>>;
     getDefaultAll(): Map<keyof IS, ReturnType<IS[keyof IS]>>;
 }
-export interface Plugin<K extends string> {
+export interface Plugin<K extends string, R = any> {
     selector: () => K;
     chain: <P extends Plugin<string>[]>(...plugins: P) => this;
-    initiator: Initiator<K>;
+    initiator: Initiator<R>;
 }
 export {};
