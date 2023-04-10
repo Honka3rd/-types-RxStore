@@ -11,9 +11,9 @@ export type Any = {
   [K: string]: any;
 };
 
-export type Initiator<R = any> =
-  | ((r: RxStore<Any> & Subscribable<Any>) => void)
-  | (() => R);
+type PluginInitiator = (r?: RxStore<Any> & Subscribable<Any>) => void;
+type ValueInitiator <R = any> =() => R
+export type Initiator<R = any> = PluginInitiator | ValueInitiator<R>;
 
 export type BS = {
   [k: string]: Initiator;
