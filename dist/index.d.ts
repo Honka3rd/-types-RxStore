@@ -3,7 +3,7 @@ import { Collection, Record as RecordI, Seq, ValueObject, Map } from "immutable"
 export type Any = {
     [K: string]: any;
 };
-export type Initiator<R = any> = (r?: RxStore<Any> & Subscribable<Any>) => R;
+export type Initiator<R = any> = ((r: RxStore<Any> & Subscribable<Any>) => void) | (() => R);
 export type BS = {
     [k: string]: Initiator;
 };
