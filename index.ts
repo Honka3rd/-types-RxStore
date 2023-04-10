@@ -11,7 +11,9 @@ export type Any = {
   [K: string]: any;
 };
 
-export type Initiator<R = any> = (r?: RxStore<Any> & Subscribable<Any>) => R;
+export type Initiator<R = any> =
+  | ((r: RxStore<Any> & Subscribable<Any>) => void)
+  | (() => R);
 
 export type BS = {
   [k: string]: Initiator;
@@ -224,7 +226,7 @@ export interface RxStore<S extends BS> {
     onStart?: (val: { [K in keyof S]: ReturnType<S[K]> }) => void;
     onError?: (err: any) => void;
     onSuccess?: (result: R) => void;
-    onComplete?: () => void
+    onComplete?: () => void;
   }) => ComputedAsync<R, S, KS>;
   getDefault<K extends keyof S>(key: K): ReturnType<S[K]>;
   children: <K extends (keyof S)[]>(
@@ -312,11 +314,11 @@ export interface Plugin<K extends string, R = any> {
   initiator: Initiator<R>;
 }
 
-export abstract class PluginImpl<K extends string, R = any> implements Plugin<K, R> {
+export abstract class PluginImpl<K extends string, R = any>
+  implements Plugin<K, R>
+{
   protected connector?: RxStore<Any> & Subscribable<Any>;
-  constructor(
-    protected id: K,
-  ) {}
+  constructor(protected id: K) {}
 
   private reportNoneConnectedError() {
     throw Error("initiator method is not called");
@@ -325,8 +327,7 @@ export abstract class PluginImpl<K extends string, R = any> implements Plugin<K,
   protected safeExecute<R>(
     callback: (connector: RxStore<Any> & Subscribable<Any>) => R
   ) {
-    const connector = this.connector as RxStore<Any> &
-      Subscribable<Any>;
+    const connector = this.connector as RxStore<Any> & Subscribable<Any>;
     if (connector) {
       return callback(connector);
     }
@@ -346,5 +347,4 @@ export abstract class PluginImpl<K extends string, R = any> implements Plugin<K,
   selector = () => this.id;
 
   abstract initiator: Initiator<R>;
-  
 }
