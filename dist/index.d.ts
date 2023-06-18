@@ -167,22 +167,6 @@ export interface RxStore<S extends BS> {
         onComplete?: () => void;
     }) => ComputedAsync<R, S>;
     getDefault<K extends keyof S>(key: K): ReturnType<S[K]>;
-    children: <K extends (keyof S)[]>(selectors: K) => Readonly<[
-        {
-            setParentState: <KK extends K[number]>(key: KK, value: ReturnType<S[KK]>) => boolean;
-            observeParentStates: (observer: (result: Record<K[number], ReturnType<S[K[number]]>>) => void) => Unobserve;
-            observeParentState: <KK extends K[number]>(key: KK, observer: (result: ReturnType<S[KK]>) => void) => Unobserve | undefined;
-            getParentState: <KK extends K[number]>(key: KK) => ReturnType<S[KK]> | undefined;
-            getParentDefault: <KK extends K[number]>(key: KK) => ReturnType<S[KK]> | undefined;
-            comparator: Comparator<ReturnType<S[K[number]]>>;
-            parentComparatorMap: Partial<Partial<{
-                [K in keyof S]: Comparator<ReturnType<S[K]>>;
-            }>>;
-        },
-        Observable<Partial<{
-            [K in keyof S]: ReturnType<S[K]>;
-        }>>
-    ]>;
 }
 export interface RxNStore<S extends BS> extends RxStore<S> {
     getClonedState: <K extends keyof S>(key: K) => ReturnType<S[K]>;
