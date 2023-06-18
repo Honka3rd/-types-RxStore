@@ -188,6 +188,14 @@ export interface ComputedAsync<R, S extends BS> {
   observe: (observer: (r: AsyncResponse<R>) => void) => Unobserve;
 }
 
+export type AsyncComputeConfig<S extends BS, R> = {
+  lazy?: boolean;
+  onStart?: (val: { [K in keyof S]: ReturnType<S[K]> }) => void;
+  onError?: (err: any) => void;
+  onSuccess?: (result: R) => void;
+  onComplete?: () => void;
+}
+
 export interface RxStore<S extends BS> {
   comparator: Comparator<any>;
   setState: <KS extends keyof S>(
@@ -215,19 +223,14 @@ export interface RxStore<S extends BS> {
     reducer: AsyncReducer<T, P, S, K>;
     key: K;
   }) => AsyncDispatch<P, T, S, K>;
-  withComputation: <R, KS extends keyof S>(params: {
+  withComputation: <R>(params: {
     computation: Computation<R, S>;
-    keys: KS[];
+    comparator?: Comparator<{ [K in keyof S]: ReturnType<S[K]> }>;
   }) => Computed<R, S>;
-  withAsyncComputation: <R, KS extends keyof S>(params: {
+  withAsyncComputation: <R>(params: {
     computation: ComputationAsync<R, S>;
-    lazy?: boolean;
-    comparator?: Comparator<{ [K in KS]: ReturnType<S[K]> }>;
-    onStart?: (val: { [K in keyof S]: ReturnType<S[K]> }) => void;
-    onError?: (err: any) => void;
-    onSuccess?: (result: R) => void;
-    onComplete?: () => void;
-  }) => ComputedAsync<R, S>;
+    comparator?: Comparator<{ [K in keyof S]: ReturnType<S[K]> }>;
+  } & AsyncComputeConfig<S, R>) => ComputedAsync<R, S>;
   getDefault<K extends keyof S>(key: K): ReturnType<S[K]>;
 }
 
