@@ -153,16 +153,16 @@ export interface AsyncDispatcher<P, T, S extends BS, K extends keyof S> {
   dispatch: AsyncDispatch<P, T, S, K>;
 }
 
-export type Computation<R, S extends BS, KS extends keyof S> = (states: {
-  [K in KS]: ReturnType<S[K]>;
+export type Computation<R, S extends BS> = (states: {
+  [K in keyof S]: ReturnType<S[K]>;
 }) => R;
 
-export type ComputationAsync<R, S extends BS, KS extends keyof S> = (states: {
-  [K in KS]: ReturnType<S[K]>;
+export type ComputationAsync<R, S extends BS> = (states: {
+  [K in keyof S]: ReturnType<S[K]>;
 }) => Promise<R> | Observable<R>;
 
-export interface Computed<R, S extends BS, KS extends keyof S> {
-  readonly computation: Computation<R, S, KS>;
+export interface Computed<R, S extends BS> {
+  readonly computation: Computation<R, S>;
   get: () => R | undefined;
   observe: (observer: (r: R) => void) => Unobserve;
 }
@@ -182,8 +182,8 @@ export type AsyncGet<R> = {
   value?: R;
 };
 
-export interface ComputedAsync<R, S extends BS, KS extends keyof S> {
-  readonly computation: ComputationAsync<R, S, KS>;
+export interface ComputedAsync<R, S extends BS> {
+  readonly computation: ComputationAsync<R, S>;
   get: () => AsyncGet<R>;
   observe: (observer: (r: AsyncResponse<R>) => void) => Unobserve;
 }
@@ -216,18 +216,18 @@ export interface RxStore<S extends BS> {
     key: K;
   }) => AsyncDispatch<P, T, S, K>;
   withComputation: <R, KS extends keyof S>(params: {
-    computation: Computation<R, S, KS>;
+    computation: Computation<R, S>;
     keys: KS[];
-  }) => Computed<R, S, KS>;
+  }) => Computed<R, S>;
   withAsyncComputation: <R, KS extends keyof S>(params: {
-    computation: ComputationAsync<R, S, KS>;
-    keys: KS[];
+    computation: ComputationAsync<R, S>;
+    lazy?: boolean;
     comparator?: Comparator<{ [K in KS]: ReturnType<S[K]> }>;
     onStart?: (val: { [K in keyof S]: ReturnType<S[K]> }) => void;
     onError?: (err: any) => void;
     onSuccess?: (result: R) => void;
     onComplete?: () => void;
-  }) => ComputedAsync<R, S, KS>;
+  }) => ComputedAsync<R, S>;
   getDefault<K extends keyof S>(key: K): ReturnType<S[K]>;
   children: <K extends (keyof S)[]>(
     selectors: K
