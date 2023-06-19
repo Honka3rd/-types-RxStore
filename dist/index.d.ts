@@ -122,7 +122,7 @@ export type AsyncGet<R> = {
 export interface ComputedAsync<R, S extends BS> {
     readonly computation: ComputationAsync<R, S>;
     get: () => AsyncGet<R>;
-    observe: (observer: (r: AsyncResponse<R>) => void) => Unobserve;
+    observe: (observer: (r: AsyncResponse<R>) => void, onPending?: Function) => Unobserve;
 }
 export type AsyncComputeConfig<S extends BS, R> = {
     lazy?: boolean;

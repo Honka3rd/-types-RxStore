@@ -12,7 +12,7 @@ export type Any = {
 };
 
 type PluginInitiator = (r?: RxStore<Any> & Subscribable<Any>) => void;
-type ValueInitiator <R = any> =() => R
+type ValueInitiator<R = any> = () => R;
 export type Initiator<R = any> = PluginInitiator | ValueInitiator<R>;
 
 export type BS = {
@@ -185,7 +185,10 @@ export type AsyncGet<R> = {
 export interface ComputedAsync<R, S extends BS> {
   readonly computation: ComputationAsync<R, S>;
   get: () => AsyncGet<R>;
-  observe: (observer: (r: AsyncResponse<R>) => void) => Unobserve;
+  observe: (
+    observer: (r: AsyncResponse<R>) => void,
+    onPending?: Function
+  ) => Unobserve;
 }
 
 export type AsyncComputeConfig<S extends BS, R> = {
@@ -194,7 +197,7 @@ export type AsyncComputeConfig<S extends BS, R> = {
   onError?: (err: any) => void;
   onSuccess?: (result: R) => void;
   onComplete?: () => void;
-}
+};
 
 export interface RxStore<S extends BS> {
   comparator: Comparator<any>;
@@ -227,10 +230,12 @@ export interface RxStore<S extends BS> {
     computation: Computation<R, S>;
     comparator?: Comparator<{ [K in keyof S]: ReturnType<S[K]> }>;
   }) => Computed<R, S>;
-  withAsyncComputation: <R>(params: {
-    computation: ComputationAsync<R, S>;
-    comparator?: Comparator<{ [K in keyof S]: ReturnType<S[K]> }>;
-  } & AsyncComputeConfig<S, R>) => ComputedAsync<R, S>;
+  withAsyncComputation: <R>(
+    params: {
+      computation: ComputationAsync<R, S>;
+      comparator?: Comparator<{ [K in keyof S]: ReturnType<S[K]> }>;
+    } & AsyncComputeConfig<S, R>
+  ) => ComputedAsync<R, S>;
   getDefault<K extends keyof S>(key: K): ReturnType<S[K]>;
 }
 
