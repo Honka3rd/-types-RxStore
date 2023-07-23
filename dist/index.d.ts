@@ -71,18 +71,14 @@ export type Action<P, T> = {
     type: T;
     payload?: P;
 };
-export type RequiredAction<P, T> = {
-    type: T;
-    payload: P;
-};
-export type Reducer<P, T, S extends BS, K extends keyof S> = (state: ReturnType<S[K]>, action: RequiredAction<T, P>) => ReturnType<S[K]>;
+export type Reducer<T, S extends BS, K extends keyof S> = (state: ReturnType<S[K]>, action: Action<T, ReturnType<S[K]>>) => ReturnType<S[K]>;
 export type AsyncReducer<P, T, S extends BS, K extends keyof S> = (state: ReturnType<S[K]>, action: Action<T, P>) => Promise<ReturnType<S[K]>> | Observable<ReturnType<S[K]>>;
-export type Dispatch<P, T> = (action: RequiredAction<P, T>) => void;
+export type Dispatch<P, T> = (action: Action<P, T>) => void;
 export type AsyncDispatchConfig<S extends BS, K extends keyof S> = {
     start?: () => void;
     success?: (r: ReturnType<S[K]>) => void;
     fail?: (error: unknown) => void;
-    errorFallback?: () => ReturnType<S[K]>;
+    fallback?: () => ReturnType<S[K]>;
     always?: () => void;
 };
 export type AsyncDispatch<P, T, S extends BS, K extends keyof S> = (action: Action<P, T>, config?: AsyncDispatchConfig<S, K>) => Promise<void>;
@@ -100,7 +96,7 @@ export type ComputationAsync<R, S extends BS> = (states: {
 }) => Promise<R> | Observable<R>;
 export interface Computed<R, S extends BS> {
     readonly computation: Computation<R, S>;
-    get: () => R | undefined;
+    get: () => R;
     observe: (observer: (r: R) => void) => Unobserve;
 }
 export type AsyncResponse<R> = {
@@ -151,7 +147,7 @@ export interface RxStore<S extends BS> {
     }>;
     getComparatorMap: () => ComparatorMap<S> | undefined;
     createDispatch: <K extends keyof S, T, P = void>(params: {
-        reducer: Reducer<T, P, S, K>;
+        reducer: Reducer<P, S, K>;
         key: K;
     }) => Dispatch<P, T>;
     createAsyncDispatch: <K extends keyof S, T, P = void>(params: {
