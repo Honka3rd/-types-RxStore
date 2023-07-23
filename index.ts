@@ -214,7 +214,7 @@ export interface RxStore<S extends BS> {
   getDataSource: () => Observable<{ [K in keyof S]: ReturnType<S[K]> }>;
   getComparatorMap: () => ComparatorMap<S> | undefined;
   createDispatch: <K extends keyof S, T extends string>(params: {
-    reducer: Reducer<ReturnType<S[K]>, S, K>;
+    reducer: Reducer<T, S, K>;
     key: K;
   }) => Dispatch<ReturnType<S[K]>, T>;
   createAsyncDispatch: <K extends keyof S, T extends string>(params: {
