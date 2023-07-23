@@ -71,7 +71,7 @@ export type Action<P, T> = {
     type: T;
     payload?: P;
 };
-export type Reducer<T, S extends BS, K extends keyof S> = (state: ReturnType<S[K]>, action: Action<T, ReturnType<S[K]>>) => ReturnType<S[K]>;
+export type Reducer<T, S extends BS, K extends keyof S> = (state: ReturnType<S[K]>, action: Action<ReturnType<S[K]>, T>) => ReturnType<S[K]>;
 export type AsyncReducer<P, T, S extends BS, K extends keyof S> = (state: ReturnType<S[K]>, action: Action<T, P>) => Promise<ReturnType<S[K]>> | Observable<ReturnType<S[K]>>;
 export type Dispatch<P, T> = (action: Action<P, T>) => void;
 export type AsyncDispatchConfig<S extends BS, K extends keyof S> = {

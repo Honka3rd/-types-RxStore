@@ -117,7 +117,7 @@ export type Action<P, T> = {
 
 export type Reducer<T, S extends BS, K extends keyof S> = (
   state: ReturnType<S[K]>,
-  action: Action<T, ReturnType<S[K]>>
+  action: Action<ReturnType<S[K]>, T>
 ) => ReturnType<S[K]>;
 
 export type AsyncReducer<P, T, S extends BS, K extends keyof S> = (
