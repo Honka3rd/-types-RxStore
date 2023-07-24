@@ -147,6 +147,7 @@ export interface Dispatcher<P, T> {
 
 export interface AsyncDispatcher<T, S extends BS, K extends keyof S> {
   dispatch: AsyncDispatch<T, S, K>;
+  observe: Observe<ReturnType<S[K]>>
 }
 
 export type Computation<R, S extends BS> = (states: {
