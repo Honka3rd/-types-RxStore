@@ -221,7 +221,8 @@ export interface RxStore<S extends BS> {
   createAsyncDispatch: <K extends keyof S, T extends string>(params: {
     reducer: AsyncReducer<T, S, K>;
     key: K;
-  }) => AsyncDispatch<T, S, K>;
+    config?: AsyncDispatchConfig<S, K>;
+  }) => [AsyncDispatch<T, S, K>, () => Unobserve];
   withComputation: <R>(params: {
     computation: Computation<R, S>;
     comparator?: Comparator<{ [K in keyof S]: ReturnType<S[K]> }>;
