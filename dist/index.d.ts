@@ -130,6 +130,7 @@ export type AsyncComputeConfig<S extends BS, R> = {
     onSuccess?: (result: R) => void;
     onComplete?: () => void;
 };
+export type Observe<T> = (observer: (val: T) => void) => Unobserve;
 export interface RxStore<S extends BS> {
     comparator: Comparator<any>;
     setState: <KS extends keyof S>(updated: {
@@ -155,7 +156,7 @@ export interface RxStore<S extends BS> {
         reducer: AsyncReducer<T, S, K>;
         key: K;
         config?: AsyncDispatchConfig<S, K>;
-    }) => [AsyncDispatch<T, S, K>, () => Unobserve];
+    }) => [AsyncDispatch<T, S, K>, Observe<ReturnType<S[K]>>];
     withComputation: <R>(params: {
         computation: Computation<R, S>;
         comparator?: Comparator<{
