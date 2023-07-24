@@ -198,7 +198,7 @@ export type AsyncComputeConfig<S extends BS, R> = {
 
 export type Observer<T> = (val: T) => void;
 
-export type Observe<T> = (observer: Observer<T>) => Unobserve;
+export type Observe<T> = (observer?: Observer<T>) => Unobserve;
 
 export interface RxStore<S extends BS> {
   comparator: Comparator<any>;
