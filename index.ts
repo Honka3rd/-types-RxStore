@@ -138,6 +138,7 @@ export type AsyncDispatchConfig<S extends BS, K extends keyof S> = {
   fail?: (error: unknown) => void;
   errorFallback?: () => ReturnType<S[K]>;
   always?: () => void;
+  lazy?: boolean;
 };
 
 export type AsyncDispatch<P, T, S extends BS, K extends keyof S> = (
