@@ -5,6 +5,7 @@ import {
   Seq,
   ValueObject,
   Map,
+  RecordOf,
 } from "immutable";
 
 export type Any = {
@@ -289,11 +290,11 @@ export interface RxImStore<IS extends IBS> extends RxStore<IS> {
   getStateAll: () => Map<keyof IS, ReturnType<IS[keyof IS]>>;
   getStates: <KS extends keyof IS>(
     keys: ConstraintKeys<KS>
-  ) => Map<KS, ReturnType<IS[KS]>>;
+  ) => RecordOf<{ [K in KS]: ReturnType<IS[K]> }>;
   getDefaults<KS extends keyof IS>(
     keys: ConstraintKeys<KS>
-  ): Map<KS, ReturnType<IS[KS]>>;
-  getDefaultAll(): Map<keyof IS, ReturnType<IS[keyof IS]>>;
+  ): RecordOf<{ [K in KS]: ReturnType<IS[K]> }>;
+  getDefaultAll(): RecordOf<{ [K in keyof IS]: ReturnType<IS[K]> }>;
 }
 
 export interface Plugin<K extends string, R = any> {

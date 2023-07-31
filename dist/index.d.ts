@@ -1,5 +1,5 @@
 import { Observable } from "rxjs";
-import { Collection, Record as RecordI, Seq, ValueObject, Map } from "immutable";
+import { Collection, Record as RecordI, Seq, ValueObject, Map, RecordOf } from "immutable";
 export type Any = {
     [K: string]: any;
 };
@@ -207,9 +207,15 @@ export type NRSConfig<S extends BS> = {
 };
 export interface RxImStore<IS extends IBS> extends RxStore<IS> {
     getStateAll: () => Map<keyof IS, ReturnType<IS[keyof IS]>>;
-    getStates: <KS extends keyof IS>(keys: ConstraintKeys<KS>) => Map<KS, ReturnType<IS[KS]>>;
-    getDefaults<KS extends keyof IS>(keys: ConstraintKeys<KS>): Map<KS, ReturnType<IS[KS]>>;
-    getDefaultAll(): Map<keyof IS, ReturnType<IS[keyof IS]>>;
+    getStates: <KS extends keyof IS>(keys: ConstraintKeys<KS>) => RecordOf<{
+        [K in KS]: ReturnType<IS[K]>;
+    }>;
+    getDefaults<KS extends keyof IS>(keys: ConstraintKeys<KS>): RecordOf<{
+        [K in KS]: ReturnType<IS[K]>;
+    }>;
+    getDefaultAll(): RecordOf<{
+        [K in keyof IS]: ReturnType<IS[K]>;
+    }>;
 }
 export interface Plugin<K extends string, R = any> {
     selector: () => K;
