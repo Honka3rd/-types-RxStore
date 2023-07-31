@@ -287,7 +287,7 @@ export type NRSConfig<S extends BS> = {
 };
 
 export interface RxImStore<IS extends IBS> extends RxStore<IS> {
-  getStateAll: () => Map<keyof IS, ReturnType<IS[keyof IS]>>;
+  getStateAll: () => RecordOf<{ [K in keyof IS]: ReturnType<IS[K]> }>;
   getStates: <KS extends keyof IS>(
     keys: ConstraintKeys<KS>
   ) => RecordOf<{ [K in KS]: ReturnType<IS[K]> }>;
