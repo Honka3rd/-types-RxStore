@@ -52,7 +52,7 @@ export type ComparatorMap<S extends BS> = Partial<{
   [K in keyof S]: Comparator<ReturnType<S[K]>>;
 }>;
 
-type ConstraintKeys<L, LAlias = L, LAlias2 = L> = [L] extends [never]
+export type ConstraintKeys<L, LAlias = L, LAlias2 = L> = [L] extends [never]
   ? []
   : L extends infer LItem
   ? [LItem?, ...ConstraintKeys<Exclude<LAlias2, LItem>, LAlias>]
@@ -88,7 +88,7 @@ export interface Reactive<S extends BS> {
   getDefaultAll: () => { [k in keyof S]: ReturnType<S[k]> };
 }
 
-type Unobserve = () => void;
+export type Unobserve = () => void;
 
 export type Subscribable<S extends BS> = {
   observe: <K extends keyof S>(
@@ -287,7 +287,9 @@ export type NRSConfig<S extends BS> = {
 
 export interface RxImStore<IS extends IBS> extends RxStore<IS> {
   getStateAll: () => Map<keyof IS, ReturnType<IS[keyof IS]>>;
-  getStates: <KS extends keyof IS>(keys: ConstraintKeys<KS>) => Map<KS, ReturnType<IS[KS]>>;
+  getStates: <KS extends keyof IS>(
+    keys: ConstraintKeys<KS>
+  ) => Map<KS, ReturnType<IS[KS]>>;
   getDefaults<KS extends keyof IS>(
     keys: ConstraintKeys<KS>
   ): Map<KS, ReturnType<IS[KS]>>;

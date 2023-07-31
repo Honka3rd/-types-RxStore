@@ -21,7 +21,7 @@ export type Comparator<T> = (prev: T, next: T) => boolean;
 export type ComparatorMap<S extends BS> = Partial<{
     [K in keyof S]: Comparator<ReturnType<S[K]>>;
 }>;
-type ConstraintKeys<L, LAlias = L, LAlias2 = L> = [L] extends [never] ? [] : L extends infer LItem ? [LItem?, ...ConstraintKeys<Exclude<LAlias2, LItem>, LAlias>] : [];
+export type ConstraintKeys<L, LAlias = L, LAlias2 = L> = [L] extends [never] ? [] : L extends infer LItem ? [LItem?, ...ConstraintKeys<Exclude<LAlias2, LItem>, LAlias>] : [];
 export interface Reactive<S extends BS> {
     get: <K extends keyof S>(key: K) => ReturnType<S[K]>;
     reset: <K extends keyof S>(key: K) => void;
@@ -48,7 +48,7 @@ export interface Reactive<S extends BS> {
         [k in keyof S]: ReturnType<S[k]>;
     };
 }
-type Unobserve = () => void;
+export type Unobserve = () => void;
 export type Subscribable<S extends BS> = {
     observe: <K extends keyof S>(key: K, observer: (result: ReturnType<S[K]>) => void, comparator?: Comparator<ReturnType<S[K]>>) => Unobserve;
     observeMultiple: <KS extends keyof S>(keys: ConstraintKeys<KS>, observer: (result: {
