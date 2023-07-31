@@ -25,7 +25,7 @@ export type ConstraintKeys<L, LAlias = L, LAlias2 = L> = [L] extends [never] ? [
 export interface Reactive<S extends BS> {
     get: <K extends keyof S>(key: K) => ReturnType<S[K]>;
     reset: <K extends keyof S>(key: K) => void;
-    resetMultiple: <KS extends Array<keyof S>>(keys: KS) => void;
+    resetMultiple: <KS extends keyof S>(keys: ConstraintKeys<KS>) => void;
     resetAll: () => void;
     set: <KS extends keyof S>(updated: {
         [K in KS]: ReturnType<S[K]>;

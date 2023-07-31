@@ -63,7 +63,7 @@ export interface Reactive<S extends BS> {
 
   reset: <K extends keyof S>(key: K) => void;
 
-  resetMultiple: <KS extends Array<keyof S>>(keys: KS) => void;
+  resetMultiple: <KS extends keyof S>(keys: ConstraintKeys<KS>) => void;
 
   resetAll: () => void;
 
