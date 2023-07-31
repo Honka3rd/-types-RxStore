@@ -52,6 +52,12 @@ export type ComparatorMap<S extends BS> = Partial<{
   [K in keyof S]: Comparator<ReturnType<S[K]>>;
 }>;
 
+type ConstraintKeys<L, LAlias = L, LAlias2 = L> = [L] extends [never]
+  ? []
+  : L extends infer LItem
+  ? [LItem?, ...ConstraintKeys<Exclude<LAlias2, LItem>, LAlias>]
+  : [];
+
 export interface Reactive<S extends BS> {
   get: <K extends keyof S>(key: K) => ReturnType<S[K]>;
 
@@ -68,14 +74,16 @@ export interface Reactive<S extends BS> {
   getDefault: <K extends keyof S>(key: K) => ReturnType<S[K]>;
 
   getMultiple: <KS extends keyof S>(
-    keys: KS[]
+    keys: ConstraintKeys<KS>
   ) => { [K in KS]: ReturnType<S[K]> };
 
   getAll: () => { [K in keyof S]: ReturnType<S[K]> };
 
   getAllKeys: () => Array<keyof S>;
 
-  getDefaults<KS extends keyof S>(keys: KS[]): { [k in KS]: ReturnType<S[k]> };
+  getDefaults<KS extends keyof S>(
+    keys: ConstraintKeys<KS>
+  ): { [k in KS]: ReturnType<S[k]> };
 
   getDefaultAll: () => { [k in keyof S]: ReturnType<S[k]> };
 }
@@ -90,7 +98,7 @@ export type Subscribable<S extends BS> = {
   ) => Unobserve;
 
   observeMultiple: <KS extends keyof S>(
-    keys: KS[],
+    keys: ConstraintKeys<KS>,
     observer: (result: { [K in KS]: ReturnType<S[K]> }) => void,
     comparator?: Comparator<{ [K in KS]: ReturnType<S[K]> }>
   ) => Unobserve;
@@ -130,7 +138,7 @@ export type Dispatch<P, T> = (action: Action<P, T>) => void;
 export type AsyncDispatchConfig<S extends BS, K extends keyof S> = {
   start?: () => void;
   success?: (r: ReturnType<S[K]>) => void;
-  fail?: (error: unknown) => void;
+  fail?: (error: unknown, fallback: ReturnType<S[K]>) => void;
   fallback?: () => ReturnType<S[K]>;
   always?: () => void;
   lazy?: boolean;
@@ -147,7 +155,7 @@ export interface Dispatcher<P, T> {
 
 export interface AsyncDispatcher<T, S extends BS, K extends keyof S> {
   dispatch: AsyncDispatch<T, S, K>;
-  observe: Observe<ReturnType<S[K]>>
+  observe: Observe<ReturnType<S[K]>>;
 }
 
 export type Computation<R, S extends BS> = (states: {
@@ -214,7 +222,7 @@ export interface RxStore<S extends BS> {
         }>)
   ) => this;
   reset: <K extends keyof S>(key: K) => this;
-  resetMultiple: <KS extends Array<keyof S>>(keys: KS) => this;
+  resetMultiple: <KS extends keyof S>(keys: ConstraintKeys<KS>) => this;
   resetAll: () => this;
   getState: <K extends keyof S>(key: K) => ReturnType<S[K]>;
   getDataSource: () => Observable<{ [K in keyof S]: ReturnType<S[K]> }>;
@@ -259,11 +267,11 @@ export interface RxNStore<S extends BS> extends RxStore<S> {
       };
   getStateAll: () => { [K in keyof S]: ReturnType<S[K]> };
   getStates: <KS extends keyof S>(
-    keys: KS[]
+    keys: ConstraintKeys<KS>
   ) => { [K in KS]: ReturnType<S[K]> };
-  getDefaults<KS extends (keyof S)[]>(
-    keys: KS
-  ): { [k in keyof S]: ReturnType<S[k]> };
+  getDefaults<KS extends keyof S>(
+    keys: ConstraintKeys<KS>
+  ): { [k in KS]: ReturnType<S[k]> };
   getDefaultAll(): { [k in keyof S]: ReturnType<S[k]> };
   getCloneFunctionMap: () => ComparatorMap<S>;
   cloneFunction?: CloneFunction<ReturnType<S[keyof S]>>;
@@ -279,10 +287,10 @@ export type NRSConfig<S extends BS> = {
 
 export interface RxImStore<IS extends IBS> extends RxStore<IS> {
   getStateAll: () => Map<keyof IS, ReturnType<IS[keyof IS]>>;
-  getStates: <KS extends keyof IS>(keys: KS[]) => Map<KS, ReturnType<IS[KS]>>;
-  getDefaults<KS extends (keyof IS)[]>(
-    keys: KS
-  ): Map<keyof IS, ReturnType<IS[keyof IS]>>;
+  getStates: <KS extends keyof IS>(keys: ConstraintKeys<KS>) => Map<KS, ReturnType<IS[KS]>>;
+  getDefaults<KS extends keyof IS>(
+    keys: ConstraintKeys<KS>
+  ): Map<KS, ReturnType<IS[KS]>>;
   getDefaultAll(): Map<keyof IS, ReturnType<IS[keyof IS]>>;
 }
 
