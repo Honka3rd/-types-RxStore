@@ -21,7 +21,7 @@ export type Comparator<T> = (prev: T, next: T) => boolean;
 export type ComparatorMap<S extends BS> = Partial<{
     [K in keyof S]: Comparator<ReturnType<S[K]>>;
 }>;
-export type ConstraintKeys<L, LAlias = L, LAlias2 = L> = [L] extends [never] ? [] : L extends infer LItem ? [LItem?, ...ConstraintKeys<Exclude<LAlias2, LItem>, LAlias>] : [];
+export type ConstraintKeys<L> = Readonly<L[]>;
 export interface Reactive<S extends BS> {
     get: <K extends keyof S>(key: K) => ReturnType<S[K]>;
     reset: <K extends keyof S>(key: K) => void;
