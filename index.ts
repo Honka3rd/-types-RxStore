@@ -223,6 +223,7 @@ export interface RxStore<S extends BS> {
   resetAll: () => this;
   getState: <K extends keyof S>(key: K) => ReturnType<S[K]>;
   getDataSource: () => Observable<{ [K in keyof S]: ReturnType<S[K]> }>;
+  getSingleSource: <K extends keyof S>(key: K) => Observable<ReturnType<S[K]>>;
   getComparatorMap: () => ComparatorMap<S> | undefined;
   createDispatch: <K extends keyof S, T extends string>(params: {
     reducer: Reducer<T, S, K>;
